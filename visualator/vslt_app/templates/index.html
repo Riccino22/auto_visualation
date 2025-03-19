@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mi primera página</title>
+</head>
+<body>
+    <h1>¡Bienvenido a Django!</h1>
+    <form method="post" action="/graphic/" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="nombre" placeholder="Escribe tu nombre">
+        <input type="file" name="dataset">
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>
