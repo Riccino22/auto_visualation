@@ -1,69 +1,25 @@
 <!DOCTYPE html>
+{% load static %}   
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'vslt_app/style.css' %}">
     <title>Document</title>
 </head>
 <body>
-    <canvas id="myChart" width="500"></canvas>
-    <canvas id="miGraficoDispersion" width="500"></canvas>
-
+    {{ llm_response }}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'scatter',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: 'Ventas',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Gráfico de ventas'
-                    }
-                }
-            }
-        })
-
-
-        const ctx2 = document.getElementById('miGraficoDispersion').getContext('2d');
-
-        new Chart(ctx2, {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    labels: 'My label',
-                    data: [
-                        {x: 10, y: 20},
-                        {x: 15, y: 10},
-                        {x: 20, y: 15},
-                        {x: 25, y: 5},
-                        {x: 30, y: 10},
-                        {x: 35, y: 15},
-                        {x: 40, y: 20},
-                    ]
-                }]
-            },
-            options: {
-                responsive: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Gráfico de dispersión'
-                    }
-                }
-            }
-
-        })
+        // llamar a la api para obtener los datos
 
     </script>
+    <script>
+        let datos = {}
+        let filename = "{{ filename }}";
+    </script>
+    <script src="{% static 'vslt_app/graph.js' %}"></script>
 </body>
+
 </html>
