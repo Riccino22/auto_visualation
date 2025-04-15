@@ -23,11 +23,18 @@ def basic_response(initial_prompt):
     response = chat_model.invoke(initial_prompt)
     return response.content.replace('\n', '').split('</think>')[1]
 
-def generate_response(title, table_content):
+def generate_response(title, table_content, user_descrption=None):
     
     # with open(filename, "wb+") as destino:
     #     for chunk in request.FILES['dataset'].chunks():  # Escribir en partes para archivos grandes
     #         destino.write(chunk)
+    descrption = ""
+    if user_descrption:
+        descrption = f"""
+            Puedes apoyarte en la siguiente descripción para trabajar con los datos:
+            
+            {user_descrption}
+        """
     try:
         """
          Estoy haciendo una aplicacion web, en donde el usuario, y el contenido del archivo se guarda en formato json en un modelo de datos llamado CSVData en la aplicacion llamada 'vslt_app'. Necesito que me ayudes a analizar ese json de la siguiente manera:
@@ -44,22 +51,25 @@ def generate_response(title, table_content):
        {table_content}
 
         Necesito que analices esa tabla, sus campos, y la estructura de los datos que contiene para entender de que tratan los datos que aborda. Luego de eso, basado en esos campos y datos, dame ideas para hacer graficos de los datos que puedan ser utiles (relacionados con el tema en cuestion, claro). 
+
+        "{descrption}"
+
         Tu respuesta final debe ser un json que debe seguir unicamente la siguiente estructura por grafico:
         [
             (signo de apertura de llaves)
-                "tipo": (tipo de grafico, los tipos de grafico son 'line', 'bar', 'scatter', 'pie', 'histogram'),
+                "tipo": (tipo de grafico, los tipos de grafico son 'line', 'bar', 'scatter', 'pie'),
                 "titulo": "Titulo de grafica 1",
                 "fields": ["nombre del campo1 a graficar", "nombre del campo2 a graficar"] # Un array de campos a graficar
             (signo de cierre de llaves),
             
             (signo de apertura de llaves)
-                "tipo": (tipo de grafico, los tipos de grafico son 'line', 'bar', 'scatter', 'pie', 'histogram'),
+                "tipo": (tipo de grafico, los tipos de grafico son 'line', 'bar', 'scatter', 'pie'),
                 "titulo": "Titulo de grafica 2",
                 "fields": ["nombre del campo1 a graficar", "nombre del campo2 a graficar"] # Un array de campos a graficar
             (signo de cierre de llaves),
             
             (signo de apertura de llaves)
-                "tipo": (tipo de grafico, los tipos de grafico son 'line', 'bar', 'scatter', 'pie', 'histogram'),
+                "tipo": (tipo de grafico, los tipos de grafico son 'line', 'bar', 'scatter', 'pie'),
                 "titulo": "Titulo de grafica 3",
                 "fields": ["nombre del campo1 a graficar", "nombre del campo2 a graficar"] # Un array de campos a graficar
             (signo de cierre de llaves)
@@ -67,7 +77,7 @@ def generate_response(title, table_content):
             Y asi sucesivamente
         ]
         
-        No supongas nada, solo basate en los datos que tienes, si no logras acceder al archivo o hay algun problema, lanza un mensaje de error.          
+        No supongas nada, solo basate en los datos que tienes, si no logras acceder al archivo o hay algun problema, lanza un mensaje de error. Sugiere el grafico considerando los tipos de datos. Por ejemplo, no sugerir un grafico de barras para valores netamente flotantes (a menos que representen categorias).        
         """)
     except Exception as e:
         return generate_response(title, table_content)

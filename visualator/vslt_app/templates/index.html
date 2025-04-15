@@ -1,15 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Mi primera página</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Datos IA</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+        }
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 2rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .file-upload:hover {
+            border-color: #2575fc;
+        }
+        .file-upload input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            cursor: pointer;
+            display: block;
+        }
+        .file-upload-text {
+            margin-top: 10px;
+        }
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+    </style>
 </head>
 <body>
-    <h1>¡Bienvenido a Django!</h1>
-    <form method="post" action="/graphic/" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="text" name="nombre" placeholder="Escribe tu nombre">
-        <input type="file" name="dataset">
-        <input type="submit" value="Enviar">
-    </form>
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold"><i class="fas fa-chart-line me-2"></i>Visualiza tus datos con IA</h1>
+            <p class="lead">Sube tu archivo y obtén gráficas inteligentes en segundos</p>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-container">
+                    <form method="post" action="/graphic/" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-bold">Descripción del proyecto (Opcional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-pen-to-square"></i></span>
+                                <textarea class="form-control" id="description" name="description" placeholder="Describe brevemente tu proyecto y qué tipo de visualización deseas obtener..."></textarea>
+                            </div>
+                            <div class="form-text">Añade detalles sobre lo que buscas visualizar para obtener mejores resultados.</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="dataset" class="form-label fw-bold">Archivo de datos</label>
+                            <div class="file-upload">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-primary"></i>
+                                <div class="file-upload-text">
+                                    <p class="mb-0">Arrastra tu archivo aquí o haz clic para seleccionar</p>
+                                    <p class="text-muted small">Soporta archivos CSV</p>
+                                </div>
+                                <input type="file" class="form-control" id="dataset" name="dataset" accept=".csv" required>
+                            </div>
+                            <div id="fileHelp" class="form-text text-muted">Selecciona el archivo con los datos que deseas visualizar.</div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-gradient btn-lg text-white">
+                                <i class="fas fa-magic me-2"></i>Generar visualización
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-0">© 2025 Visualizador de Datos IA | Creado con <i class="fas fa-heart text-danger"></i> y tecnología</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mostrar el nombre del archivo seleccionado
+        document.getElementById('dataset').addEventListener('change', function(e) {
+            const fileName = e.target.files[0].name;
+            const fileText = document.querySelector('.file-upload-text p:first-child');
+            fileText.textContent = 'Archivo seleccionado: ' + fileName;
+        });
+
+        // Validación del formulario
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
 </body>
 </html>

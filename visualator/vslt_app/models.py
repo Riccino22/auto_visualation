@@ -12,6 +12,7 @@ class User(models.Model):
 class CSVData(models.Model):
     title = models.CharField(max_length=200)
     file_name = models.CharField(max_length=255)
+    description = models.TextField()
     uploaded_at = models.DateTimeField(auto_now_add=True)
     data_json = models.JSONField(default=dict)  # Store the CSV content as JSON
     

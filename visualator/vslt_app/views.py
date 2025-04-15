@@ -25,8 +25,8 @@ def get_data(request):
     csv_data = CSVData.objects.get(title=title)
     data = csv_data.data_json
     df = pd.DataFrame(json.loads(data))
-    table_content =df.head().to_dict(orient="records")
-    llm_response = llm.generate_response(title, table_content)
+    table_content = df.sample(20).to_dict(orient="records")
+    llm_response = llm.generate_response(title=title, table_content=table_content, user_descrption=csv_data.description)
     print(llm_response)
     return JsonResponse({
         'data': json.loads(data),
@@ -49,7 +49,8 @@ def graphic(request):
     df = pd.read_csv(request.FILES['dataset'])
     csv_data = CSVData(
         title=filename,
-        data_json=df.to_json(orient='records')
+        data_json=df.to_json(orient='records'),
+        description=request.POST['description']
     )
     csv_data.save()
     
